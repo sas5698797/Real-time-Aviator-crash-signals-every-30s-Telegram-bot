@@ -1,26 +1,32 @@
 name: Aviator 30s Tracker
 on:
-  workflow_dispatch:   # Allows manual triggering from the GitHub Actions tab
+  workflow_dispatch: # دستی چلانے کا آپشن
   schedule:
-    - cron: '0 */1 * * *'  # Runs at the start of every hour (e.g., 00:00, 01:00, etc.)
+    - cron: '0 */1 * * *'  # ہر گھنٹے میں ایک بار (00 منٹ پر)
+
 jobs:
   track-aviator:
-    runs-on: ubuntu-latest   # The type of machine to run the job on
-    timeout-minutes: 60      # Each job will run for a maximum of 60 minutes
+    runs-on: ubuntu-latest  # مفت Linux سرور
+    timeout-minutes: 60     # ہر جاب 60 منٹ تک چلے گی
+    
     steps:
-      - name: Checkout code  # Step 1: Check out the repository code
-        uses: actions/checkout@v4
-
-      - name: Set up Python  # Step 2: Set up the specified Python version
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies  # Step 3: Install the required Python packages
-        run: pip install -r requirements.txt
-
-      - name: Run Continuous Tracker  # Step 4: Run the main script
-        env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}   # Use the secret for the bot token
-          CHAT_ID: ${{ secrets.CHAT_ID }}       # Use the secret for the chat ID
-        run: python main.py
+    # مرحلہ 1: کوڈ ڈاؤن لوڈ کریں
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    # مرحلہ 2: Python سیٹ اپ کریں
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'  # Python ورژن
+      
+    # مرحلہ 3: لائبریریز انسٹال کریں
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+      
+    # مرحلہ 4: سکرپٹ چلائیں
+    - name: Run Continuous Tracker
+      env:
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}  # خفیہ ٹوکن
+        CHAT_ID: ${{ secrets.CHAT_ID }}      # خفیہ چیٹ آئی ڈی
+      run: python main.py  # مین سکرپٹ چلائیں
