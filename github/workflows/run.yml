@@ -1,0 +1,26 @@
+name: Aviator 30s Tracker
+on:
+  workflow_dispatch:   # Allows manual triggering from the GitHub Actions tab
+  schedule:
+    - cron: '0 */1 * * *'  # Runs at the start of every hour (e.g., 00:00, 01:00, etc.)
+jobs:
+  track-aviator:
+    runs-on: ubuntu-latest   # The type of machine to run the job on
+    timeout-minutes: 60      # Each job will run for a maximum of 60 minutes
+    steps:
+      - name: Checkout code  # Step 1: Check out the repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Python  # Step 2: Set up the specified Python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies  # Step 3: Install the required Python packages
+        run: pip install -r requirements.txt
+
+      - name: Run Continuous Tracker  # Step 4: Run the main script
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}   # Use the secret for the bot token
+          CHAT_ID: ${{ secrets.CHAT_ID }}       # Use the secret for the chat ID
+        run: python main.py
