@@ -1,29 +1,27 @@
 name: Aviator 30s Tracker
 
 on:
-  workflow_dispatch:  # Manual run
-  schedule:
-    - cron: '*/30 * * * *'  # Every 30 seconds (not guaranteed, GitHub runs roughly every 1 min)
+  workflow_dispatch:  # صرف دستی چلانے کی اجازت
 
 jobs:
   track-aviator:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 60  # زیادہ سے زیادہ 1 گھنٹہ چلنے کی اجازت
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-    - name: Run Aviator Bot
-      env:
-        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        CHAT_ID: ${{ secrets.CHAT_ID }}
-      run: python Main.py
+      - name: Run Continuous Tracker
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python Main.py
